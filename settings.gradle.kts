@@ -21,3 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Run Tracker"
 include(":app")
+include(":auth:data")
+include(":auth:domain")
+include(":auth:presentation")
