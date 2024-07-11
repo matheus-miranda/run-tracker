@@ -28,3 +28,8 @@ android {
         jvmTarget = "1.8"
     }
 }
+
+dependencies {
+    implementation(projects.core.domain)
+    implementation(projects.core.data)
+}
