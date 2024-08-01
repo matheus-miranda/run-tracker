@@ -83,7 +83,7 @@ suspend inline fun <reified Response : Any> HttpClient.delete(
     }
 }
 
-suspend inline fun <reified Request, reified Response> HttpClient.post(
+suspend inline fun <reified Request, reified Response : Any> HttpClient.post(
     route: String,
     body: Request,
 ): Result<Response, DataError.Network> {
