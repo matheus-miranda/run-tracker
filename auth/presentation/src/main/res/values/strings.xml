@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Intro Screen -->
+    <string name="runtracker">Runtracker</string>
+    <string name="welcome_to_runtracker">Welcome to Runtracker</string>
+    <string name="description">Track your runs, set goals and achieve fitness milestones with our intuitive app.</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
+</resources>
