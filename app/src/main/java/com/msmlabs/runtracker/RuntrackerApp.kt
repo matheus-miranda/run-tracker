@@ -3,6 +3,7 @@ package com.msmlabs.runtracker
 import android.app.Application
 import com.msmlabs.auth.data.di.authDataModule
 import com.msmlabs.auth.presentation.di.authViewModelModule
+import com.msmlabs.core.data.networking.di.coreDataModule
 import com.msmlabs.runtracker.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -27,6 +28,7 @@ class RuntrackerApp : Application() {
                 appModule,
                 authDataModule,
                 authViewModelModule,
+                coreDataModule,
             )
         }
     }
