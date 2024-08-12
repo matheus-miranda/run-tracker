@@ -70,7 +70,7 @@ private fun RegisterScreen(
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
                 .padding(horizontal = 16.dp, vertical = 32.dp)
-                .padding(top = 16.dp)
+                .padding(top = 32.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.create_account),
