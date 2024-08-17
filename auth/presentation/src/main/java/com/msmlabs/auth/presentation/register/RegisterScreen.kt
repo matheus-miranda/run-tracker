@@ -40,7 +40,6 @@ import com.msmlabs.core.presentation.designsystem.CrossIcon
 import com.msmlabs.core.presentation.designsystem.EmailIcon
 import com.msmlabs.core.presentation.designsystem.Poppins
 import com.msmlabs.core.presentation.designsystem.RunTrackerDarkRed
-import com.msmlabs.core.presentation.designsystem.RunTrackerGray
 import com.msmlabs.core.presentation.designsystem.RunTrackerGreen
 import com.msmlabs.core.presentation.designsystem.RunTrackerTheme
 import com.msmlabs.core.presentation.designsystem.components.GradientBackground
@@ -75,7 +74,13 @@ fun RegisterScreenRoot(
 
     RegisterScreen(
         state = viewModel.state,
-        onAction = viewModel::onAction,
+        onAction = { action ->
+            when (action) {
+                RegisterAction.OnLoginClick -> onSignInClick.invoke()
+                else -> Unit
+            }
+            viewModel.onAction(action)
+        },
     )
 }
 
@@ -101,7 +106,7 @@ private fun RegisterScreen(
                 withStyle(
                     style = SpanStyle(
                         fontFamily = Poppins,
-                        color = RunTrackerGray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 ) {
                     append(stringResource(id = R.string.already_have_an_account) + " ")
