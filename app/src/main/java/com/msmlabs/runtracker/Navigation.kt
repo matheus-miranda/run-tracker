@@ -1,5 +1,6 @@
 package com.msmlabs.runtracker
 
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
@@ -21,6 +22,7 @@ fun NavigationRoot(
         startDestination = "auth"
     ) {
         authGraph(navController)
+        runGraph(navController)
     }
 }
 
@@ -68,6 +70,17 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController) {
                     }
                 },
             )
+        }
+    }
+}
+
+private fun NavGraphBuilder.runGraph(navController: NavHostController) {
+    navigation(
+        startDestination = "run_overview",
+        route = "run"
+    ) {
+        composable("run_overview") {
+            Text(text = "Run overview!")
         }
     }
 }
