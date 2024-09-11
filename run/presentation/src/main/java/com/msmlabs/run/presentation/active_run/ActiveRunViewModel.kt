@@ -81,7 +81,7 @@ class ActiveRunViewModel(
 
             ActiveRunAction.OnResumeRunClick -> state = state.copy(shouldTrack = true)
 
-            ActiveRunAction.OnToggleRunClick -> state = state.copy(hasStartedRunning = true, shouldTrack = false)
+            ActiveRunAction.OnToggleRunClick -> state = state.copy(hasStartedRunning = true, shouldTrack = !state.shouldTrack)
 
             is ActiveRunAction.SubmitLocationPermissionInfo -> {
                 hasLocationPermission.value = action.acceptedLocationPermission
