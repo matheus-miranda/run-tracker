@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.msmlabs.core.presentation.designsystem.RunTrackerTheme
 import com.msmlabs.core.presentation.designsystem.StartIcon
 import com.msmlabs.core.presentation.designsystem.StopIcon
+import com.msmlabs.core.presentation.designsystem.components.RuntrackerActionButton
 import com.msmlabs.core.presentation.designsystem.components.RuntrackerDialog
 import com.msmlabs.core.presentation.designsystem.components.RuntrackerFloatingActionButton
 import com.msmlabs.core.presentation.designsystem.components.RuntrackerOutlinedActionButton
@@ -155,6 +156,30 @@ private fun ActiveRunScreen(
         }
     )
 
+    if (!state.shouldTrack && state.hasStartedRunning) {
+        RuntrackerDialog(
+            title = stringResource(id = R.string.running_is_paused),
+            onDismiss = { onAction(ActiveRunAction.OnResumeRunClick) },
+            description = stringResource(id = R.string.resume_or_finish_run),
+            primaryButton = {
+                RuntrackerActionButton(
+                    text = stringResource(id = R.string.resume),
+                    isLoading = false,
+                    onClick = { onAction(ActiveRunAction.OnResumeRunClick) },
+                    modifier = Modifier.weight(1f)
+                )
+            },
+            secondaryButton = {
+                RuntrackerOutlinedActionButton(
+                    text = stringResource(id = R.string.finish),
+                    isLoading = state.isSavingRun,
+                    onClick = { onAction(ActiveRunAction.OnFinishRunClick) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        )
+    }
+
     if (state.showLocationRationale || state.showNotificationRationale) {
         RuntrackerDialog(
             title = stringResource(id = R.string.permission_required),
@@ -171,10 +196,12 @@ private fun ActiveRunScreen(
                 else -> stringResource(id = R.string.notification_rationale)
             },
             primaryButton = {
-                RuntrackerOutlinedActionButton(text = stringResource(id = R.string.ok), isLoading = false, onClick = {
-                    onAction(ActiveRunAction.DismissRationaleDialog)
-                    permissionLauncher.requestRuntrackerPermissions(context)
-                })
+                RuntrackerOutlinedActionButton(text = stringResource(id = R.string.ok), isLoading = false,
+                    onClick = {
+                        onAction(ActiveRunAction.DismissRationaleDialog)
+                        permissionLauncher.requestRuntrackerPermissions(context)
+                    }
+                )
             }
         )
     }

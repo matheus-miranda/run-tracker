@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -30,9 +31,9 @@ fun RuntrackerDialog(
     title: String,
     onDismiss: () -> Unit,
     description: String,
-    primaryButton: @Composable () -> Unit,
+    primaryButton: @Composable RowScope.() -> Unit,
     modifier: Modifier = Modifier,
-    secondaryButton: @Composable () -> Unit = {},
+    secondaryButton: @Composable RowScope.() -> Unit = {},
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Column(
@@ -58,7 +59,7 @@ fun RuntrackerDialog(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 secondaryButton()
