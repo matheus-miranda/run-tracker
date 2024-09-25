@@ -110,6 +110,7 @@ class RunningTracker(
                     )
                 }
             }
+            .launchIn(applicationScope)
     }
 
     fun setIsTracking(isTracking: Boolean) {
