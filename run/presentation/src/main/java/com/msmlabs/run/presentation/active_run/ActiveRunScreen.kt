@@ -35,6 +35,7 @@ import com.msmlabs.core.presentation.designsystem.components.RuntrackerToolbar
 import com.msmlabs.run.presentation.R
 import com.msmlabs.run.presentation.active_run.components.RunDataCard
 import com.msmlabs.run.presentation.active_run.maps.TrackerMap
+import com.msmlabs.run.presentation.active_run.service.ActiveRunService
 import com.msmlabs.run.presentation.util.hasLocationPermission
 import com.msmlabs.run.presentation.util.hasNotificationPermission
 import com.msmlabs.run.presentation.util.shouldShowLocationPermissionRationale
@@ -44,9 +45,11 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ActiveRunScreenRoot(
     viewModel: ActiveRunViewModel = koinViewModel(),
+    onServiceToggle: (isServiceRunning: Boolean) -> Unit,
 ) {
     ActiveRunScreen(
         state = viewModel.state,
+        onServiceToggle = onServiceToggle,
         onAction = viewModel::onAction,
     )
 }
@@ -54,6 +57,7 @@ fun ActiveRunScreenRoot(
 @Composable
 private fun ActiveRunScreen(
     state: ActiveRunState,
+    onServiceToggle: (isServiceRunning: Boolean) -> Unit,
     onAction: (ActiveRunAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -106,6 +110,18 @@ private fun ActiveRunScreen(
 
         if (!showLocationRationale && !showNotificationRationale) {
             permissionLauncher.requestRuntrackerPermissions(context)
+        }
+    }
+
+    LaunchedEffect(key1 = state.isRunFinished) {
+        if (state.isRunFinished) {
+            onServiceToggle(false)
+        }
+    }
+
+    LaunchedEffect(key1 = state.shouldTrack) {
+        if (context.hasLocationPermission() && state.shouldTrack && !ActiveRunService.isServiceActive) {
+            onServiceToggle(true)
         }
     }
 
@@ -237,6 +253,7 @@ private fun ActiveRunScreenPreview() {
     RunTrackerTheme {
         ActiveRunScreen(
             state = ActiveRunState(),
+            onServiceToggle = {},
             onAction = {}
         )
     }
