@@ -20,6 +20,7 @@ val DarkColorScheme = darkColorScheme(
     onSurface = RunTrackerWhite,
     onSurfaceVariant = RunTrackerGray,
     error = RunTrackerDarkRed,
+    errorContainer = RunTrackerDarkRed5,
 )
 
 @Composable
