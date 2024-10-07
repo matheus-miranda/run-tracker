@@ -4,6 +4,7 @@ import android.app.Application
 import com.msmlabs.auth.data.di.authDataModule
 import com.msmlabs.auth.presentation.di.authViewModelModule
 import com.msmlabs.core.data.di.coreDataModule
+import com.msmlabs.core.database.di.databaseModule
 import com.msmlabs.run.location.di.locationModule
 import com.msmlabs.run.presentation.di.runPresentationModule
 import com.msmlabs.runtracker.di.appModule
@@ -39,6 +40,7 @@ class RuntrackerApp : Application() {
                 coreDataModule,
                 runPresentationModule,
                 locationModule,
+                databaseModule,
             )
         }
     }
