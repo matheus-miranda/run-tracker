@@ -6,6 +6,7 @@ import com.msmlabs.auth.presentation.di.authViewModelModule
 import com.msmlabs.core.data.di.coreDataModule
 import com.msmlabs.core.database.di.databaseModule
 import com.msmlabs.run.location.di.locationModule
+import com.msmlabs.run.network.di.networkModule
 import com.msmlabs.run.presentation.di.runPresentationModule
 import com.msmlabs.runtracker.di.appModule
 import kotlinx.coroutines.CoroutineScope
@@ -41,6 +42,7 @@ class RuntrackerApp : Application() {
                 runPresentationModule,
                 locationModule,
                 databaseModule,
+                networkModule,
             )
         }
     }

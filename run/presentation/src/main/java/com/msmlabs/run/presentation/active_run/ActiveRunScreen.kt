@@ -6,6 +6,7 @@ import android.Manifest
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -33,6 +34,7 @@ import com.msmlabs.core.presentation.designsystem.components.RuntrackerFloatingA
 import com.msmlabs.core.presentation.designsystem.components.RuntrackerOutlinedActionButton
 import com.msmlabs.core.presentation.designsystem.components.RuntrackerScaffold
 import com.msmlabs.core.presentation.designsystem.components.RuntrackerToolbar
+import com.msmlabs.core.presentation.ui.ObserveAsEvents
 import com.msmlabs.run.presentation.R
 import com.msmlabs.run.presentation.active_run.components.RunDataCard
 import com.msmlabs.run.presentation.active_run.maps.TrackerMap
@@ -48,11 +50,38 @@ import java.io.ByteArrayOutputStream
 fun ActiveRunScreenRoot(
     viewModel: ActiveRunViewModel = koinViewModel(),
     onServiceToggle: (isServiceRunning: Boolean) -> Unit,
+    onFinish: () -> Unit,
+    onBack: () -> Unit,
 ) {
+    val context = LocalContext.current
+
+    ObserveAsEvents(flow = viewModel.events) { event ->
+        when (event) {
+            is ActiveRunEvent.Error -> {
+                Toast.makeText(context, event.error.asString(context), Toast.LENGTH_LONG).show()
+            }
+
+            ActiveRunEvent.RunSaved -> {
+                onFinish.invoke()
+            }
+        }
+    }
+
     ActiveRunScreen(
         state = viewModel.state,
         onServiceToggle = onServiceToggle,
-        onAction = viewModel::onAction,
+        onAction = { action ->
+            when (action) {
+                ActiveRunAction.OnBackClick -> {
+                    if (viewModel.state.hasStartedRunning.not()) {
+                        onBack.invoke()
+                    }
+                }
+
+                else -> Unit
+            }
+            viewModel.onAction(action)
+        }
     )
 }
 
