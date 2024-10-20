@@ -1,5 +1,6 @@
 package com.msmlabs.core.data.run
 
+import com.msmlabs.core.data.networking.get
 import com.msmlabs.core.database.dao.RunPendingSyncDao
 import com.msmlabs.core.database.mapper.toRun
 import com.msmlabs.core.domain.SessionStorage
@@ -13,6 +14,10 @@ import com.msmlabs.core.domain.util.DataError
 import com.msmlabs.core.domain.util.EmptyResult
 import com.msmlabs.core.domain.util.Result
 import com.msmlabs.core.domain.util.asEmptyDataResult
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerAuthProvider
+import io.ktor.client.plugins.plugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -27,6 +32,7 @@ class OfflineFirstRunRepository(
     private val runPendingSyncDao: RunPendingSyncDao,
     private val sessionStorage: SessionStorage,
     private val syncRunScheduler: SyncRunScheduler,
+    private val client: HttpClient,
 ) : RunRepository {
 
     override fun getRuns(): Flow<List<Run>> {
@@ -117,7 +123,7 @@ class OfflineFirstRunRepository(
                 .map {
                     launch {
                         val run = it.run.toRun()
-                        when (val result = remoteRunDataSource.postRun(run, it.mapPictureBytes)) {
+                        when (remoteRunDataSource.postRun(run, it.mapPictureBytes)) {
                             is Result.Error -> Unit
                             is Result.Success -> applicationScope.launch {
                                 runPendingSyncDao.deleteRunPendingSyncEntity(it.runId)
@@ -130,7 +136,7 @@ class OfflineFirstRunRepository(
                 .await()
                 .map {
                     launch {
-                        when (val result = remoteRunDataSource.deleteRun(it.runId)) {
+                        when (remoteRunDataSource.deleteRun(it.runId)) {
                             is Result.Error -> Unit
                             is Result.Success -> applicationScope.launch {
                                 runPendingSyncDao.deleteDeletedRunSyncEntity(it.runId)
@@ -142,5 +148,21 @@ class OfflineFirstRunRepository(
             createJobs.forEach { it.join() }
             deleteJobs.forEach { it.join() }
         }
+    }
+
+    override suspend fun deleteAllRuns() {
+        localRunDataSource.deleteAllRuns()
+    }
+
+    override suspend fun logout(): EmptyResult<DataError.Network> {
+        val result = client.get<Unit>(
+            route = "/logout"
+        ).asEmptyDataResult()
+
+        client.plugin(Auth).providers.filterIsInstance<BearerAuthProvider>()
+            .firstOrNull()
+            ?.clearToken()
+
+        return result
     }
 }

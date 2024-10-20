@@ -31,6 +31,7 @@ class ActiveRunService : Service() {
 
     private val baseNotification by lazy {
         NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+            .setOnlyAlertOnce(true)
             .setSmallIcon(com.msmlabs.core.presentation.designsystem.R.drawable.logo)
             .setContentTitle(getString(R.string.active_run))
     }
