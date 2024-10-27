@@ -1,6 +1,8 @@
 package com.msmlabs.runtracker
 
 import android.app.Application
+import android.content.Context
+import com.google.android.play.core.splitcompat.SplitCompat
 import com.msmlabs.auth.data.di.authDataModule
 import com.msmlabs.auth.presentation.di.authViewModelModule
 import com.msmlabs.core.data.di.coreDataModule
@@ -49,5 +51,10 @@ class RuntrackerApp : Application() {
                 runDataModule,
             )
         }
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        SplitCompat.install(this)
     }
 }
