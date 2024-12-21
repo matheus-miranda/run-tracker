@@ -170,6 +170,8 @@ runtracker-android-room = { id = "runtracker.android.room", version = "unspecifi
 runtracker-android-dynamic-feature = { id = "runtracker.android.dynamic.feature", version = "unspecified" }
 runtracker-jvm-library = { id = "runtracker.jvm.library", version = "unspecified" }
 runtracker-jvm-ktor = { id = "runtracker.jvm.ktor", version = "unspecified" }
+runtracker-jvm-junit5 = { id = "runtracker.jvm.junit5", version = "unspecified" }
+runtracker-android-junit5 = { id = "runtracker.android.junit5", version = "unspecified" }
 
 [bundles]
 compose = [
